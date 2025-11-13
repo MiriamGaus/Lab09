@@ -45,19 +45,25 @@ we need to be able to free it), and the new location is returned.
 #include <string.h>
 #include <stdlib.h>
 
-char *copystring(char const *str)
-{ // you've done this in task1, you can copy here that as well!
-    int length = strlen(str);
-    char *newstr;
-    newstr = (char *)malloc((length + 1) * sizeof(char));
-    if (newstr == NULL)
-        return NULL; /* :( */
-    strcpy(newstr, str);
-    return newstr;
+char *copystring(char const *str) { // you've done this in task1, you can copy here that as well!
+    char * copy = (char*) malloc((strlen(str) + 1)* sizeof(char));
+    if(!copy) return NULL;
+    return strcpy(copy, str);
 }
 
-___ stringcat(___, ____)
-{
+/* 
+ * Allocate and return a new NUL-terminated string containing the bytes of x followed by y. The function 
+ * expects x to be heap-allocated (it will free x), y may be any NUL-terminated string, and on success returns 
+ * a pointer to the newly allocated concatenation (caller must free it). On allocation failure the function returns 
+ * NULL (and x will have been freed), so callers should check the result. Typical usage: x = stringcat(x, "suffix");.
+ * 
+ */
+char* stringcat(char const *x,char const *y) {
+    char *str = (char*) malloc((strlen(x) + strlen(y) - 1) * sizeof(char));
+    if(!str) return NULL;
+    strcat(str, x);
+    strcat(str + strlen(x) - 1, y);
+    return str;
 }
 
 int main()
@@ -66,7 +72,6 @@ int main()
     x = copystring("apple"); /* from the previous task */
     char* y = stringcat(x, "tree");
     printf("%s\n", y); // appletree
-
     free(x);
     free(y);
     return 0;

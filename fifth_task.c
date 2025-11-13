@@ -9,9 +9,33 @@ containing hello, world!: the second string has been inserted between letters "o
 */
 
 #include <stdio.h> //don't forget to include the required libraries
+#include <stdlib.h>
+#include <string.h>
 
-int main()
-{
+char * insertstring(char* const original, int start, char *input) {
+  int oriLen = strlen(original);
+  int inLen = strlen(input);
+  int len = oriLen + inLen;
+  if(start < 0 || start > oriLen) {
+    printf("Error inserting at the given index not possible.\n");
+    return NULL;
+  }
+  char *str = (char*) malloc((len + 1) * sizeof(char));
+  if(!str) {
+    printf("Error while allocating memory.\n");
+    return NULL;
+  }
+  memcpy(str, original, start);
+  memcpy(str + start, input, inLen);
+  memcpy(str + start + inLen, original + start, oriLen - start);
+  str[len] = '\0';
+  return str;
+}
 
+int main() {
+  char* str;
+  str = insertstring("hello!", 5, ", world");
+  printf("%s", str);
+  free(str);
   return 0;
 }
